@@ -1,36 +1,3 @@
-/**
- * 
- * Manipulating the DOM exercise.
- * Exercise programmatically builds navigation,
- * scrolls to anchors from navigation,
- * and highlights section in viewport upon scrolling.
- * 
- * Dependencies: None
- * 
- * JS Version: ES2015/ES6
- * 
- * JS Standard: ESlint
- * 
-*/
-
-/**
- * Define Global Variables
- * 
-*/
-
-/**
- * End Global Variables
- * Start Helper Functions
- * 
-*/
-
-
-/**
- * End Helper Functions
- * Begin Main Functions
- * 
-*/
-
 // build the nav
 
 const buildTheNav = () => {
@@ -41,8 +8,9 @@ const buildTheNav = () => {
     const navItem = document.createElement('li');
     let section = sections[i];
     let sectionLabel = section.getElementsByTagName('h2')[0].innerText;
-    navItem.innerHTML = `<div data-id=${section.id} class="menu__link">${sectionLabel}</div>`;
-    navItem.style.cursor = "pointer";
+    const className = i === 0 ? 'menu__link active' : 'menu__link'
+    navItem.innerHTML = `<div data-id=${section.id} class="${className}">${sectionLabel}</div>`;
+    navItem.style.cursor = 'pointer';
     nav.appendChild(navItem);
   }
 }
@@ -51,19 +19,36 @@ buildTheNav();
 
 // Add class 'active' to section when near top of viewport
 
+const addActive = (id) => {
+  let previousItem = document.querySelector('.active-section');
+  previousItem.classList.remove('active-section');
+  let current = document.getElementById(id);
+  current.classList.add('active-section');
 
-// Scroll to anchor ID using scrollTO event
+  let previousBtn = document.querySelector('.active');
+  if (previousBtn) {
+      previousBtn.classList.remove('active');
+  }
+  let navBtn = document.querySelector(`[data-id = ${id}]`);
+  navBtn.classList.add('active');
+}
 
+// onScroll event handler
 
-/**
- * End Main Functions
- * Begin Events
- * 
-*/
+const onScroll = () => {
+  const sections = document.querySelectorAll('section');
 
-// Build menu 
+  for (let i = 0; i < sections.length; i++) {
+      let section = sections[i];
+      let area = section.getBoundingClientRect();
 
-// Scroll to section on link click
+      const navBar = document.getElementById('navbar__list');
+      let offset = navBar.getBoundingClientRect().height;
+      if (area.bottom >= 0 + offset) {
+          addActive(section.id);
+          break;
+      }
+  }
+}
 
-// Set sections as active
-
+document.addEventListener('scroll', onScroll);
