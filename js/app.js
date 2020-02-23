@@ -1,4 +1,13 @@
-// build the nav
+// Navigation item on click handler
+
+const navItemOnClickHandler = (event) => {
+  let dataId = event.target.getAttribute('data-id');
+  let active = document.getElementById(dataId);
+  let top = active.offsetTop;
+  window.scrollTo({ top, behavior: 'smooth'})
+}
+
+// Build the navigation bar
 
 const buildTheNav = () => {
   const sections = document.querySelectorAll('section');
@@ -9,6 +18,7 @@ const buildTheNav = () => {
     let section = sections[i];
     let sectionLabel = section.getElementsByTagName('h2')[0].innerText;
     const className = i === 0 ? 'menu__link active' : 'menu__link'
+    navItem.addEventListener('click', navItemOnClickHandler);
     navItem.innerHTML = `<div data-id=${section.id} class="${className}">${sectionLabel}</div>`;
     navItem.style.cursor = 'pointer';
     nav.appendChild(navItem);
@@ -33,7 +43,7 @@ const addActive = (id) => {
   navBtn.classList.add('active');
 }
 
-// onScroll event handler
+// Window onScroll event handler
 
 const onScroll = () => {
   const sections = document.querySelectorAll('section');
